@@ -1,0 +1,8 @@
+pyyaml
+pandas
+seaborn
+tables
+networkx
+spacy
+matplotlib
+sentence_transformers
