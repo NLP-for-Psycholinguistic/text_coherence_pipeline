@@ -26,8 +26,8 @@ def texts_to_df_graph(dataset_text:pd.DataFrame,config:str,logger = logging)->pd
     dataset_text["text"] = dataset_text["text"].map(lambda x : clean_text(x,config_dict))
 
     logger.info("Processing and encoding text...")
-    logger.info(f"   Using method {config['sentence_segmentation_method']}")
-    dataset_text["text"] = dataset_text["text"].map(lambda x : process_for_sentence_trf(x))
+    logger.info(f"=>Using method {config['sentence_segmentation_method']}")
+    dataset_text["text"] = dataset_text["text"].map(lambda x : process_for_sentence_trf(x,config_dict))
     dataset_text["embeddings"] = dataset_text["text"].map(lambda x : encode_sentence(x,encoder))
 
     logger.info("Building graphs from text...")
@@ -57,47 +57,42 @@ def clean_text(text:str,config:dict)->str:
 #sentence splitting methods
 
 def text_to_sentences(text :str)->list:
-    """Split the text into sentences, also removing some special characters that were used during retrancription"""
-    sentences = []
-    buffer = ""
-    for letter in text:
-        buffer=buffer + letter.lower()
-        if letter==" " and len(buffer)>3:
-                if buffer[-2]=='.' or  buffer[-2]=='?' or buffer[-2]=='!':
-                    if buffer.count(" ") > 3:
-                        sentences.append(buffer[:-2])
-                    buffer = ""        
-    sentences.append(buffer)
-    return sentences
+    text = text.replace('?','.')
+    text = text.replace('!','.')
+    text = text.replace('...',' ')
+    text = text.split('.')
+    return [sentence for sentence in text if sentence.count(' ') > 3]
 
-def text_to_sentences_spacy(text:str)->list:
-    """Split the text into sentences using spacy"""
-    nlp = spacy.load("fr_core_news_lg")
-    doc = nlp(text)
-    sentences = [sent.text for sent in doc.sents]
-    return sentences
+def cut_sentence_by_comma(sentence:str)->list:
+    sub_sentence = []
+    s = []
+    for elem in sentence.replace(',',' , ').split(' '):
+        s.append(elem)
+        if len(s)> 50 and elem ==',':
+            sub_sentence.append(' '.join(s))
+            s = []
+    return sub_sentence
 
 def text_to_sentences_comma(text:str)->list:
     """Split the text into sentences, then splits again based on commas if the sentence is too long"""
-    sentences = []
-    buffer = ""
-    for letter in text:
-        buffer=buffer + letter.lower()
-        if letter==" " and len(buffer)>3:
-                if buffer[-2]=='.' or  buffer[-2]=='?' or buffer[-2]=='!':
-                    if buffer.count(" ") > 3:
-                        if buffer.count(" ") > 15:
-                            buffer = buffer[:-2]
-                            sentences.extend(buffer.split(","))
-                        sentences.append(buffer[:-2])
-                    buffer = ""        
-    sentences.append(buffer)
-    return sentences
+    sentences = text_to_sentences(text)
+    sentences2 = []
+    for s in sentences:
+        if s.count(' ')> 100:
+            #sentence is too long
+            #split on commas by the middle so that we have two equal sub-sentences 
+            sentences2.extend(cut_sentence_by_comma(s))
+        else:
+            sentences2.append(s)
+    return sentences2
 
 ## Processing so the text is usable
-def process_for_sentence_trf(text:str):
+def process_for_sentence_trf(text:str,config:dict)->list[str]:
     """Process the text so that it can be used for the sentence transformer."""
-    sentences = text_to_sentences(text)
+    if config['sentence_segmentation_method'] == 'punct_comma':
+        sentences = text_to_sentences_comma(text)
+    else:
+        sentences = text_to_sentences(text)
     return sentences
 
 def encode_sentence(sentences:str,encoder:Encoder):

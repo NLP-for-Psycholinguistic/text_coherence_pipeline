@@ -1,5 +1,4 @@
 ---
-model : 'sentence_sim' #spacy_trf or spacy_lg or sentence_sim
 scale : True #True or False
 storage : "/home/samuel/Bureau/text_df_graph.pkl"
 sentence_segmentation_method : "punctuation" #spacy, punctuation, punct_commas
