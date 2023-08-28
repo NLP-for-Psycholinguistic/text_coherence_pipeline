@@ -138,4 +138,4 @@ def scale_df_graph(df:pd.DataFrame)->pd.DataFrame:
             g.edges[edge]['weight'] = (min_edge + g.edges[edge]['weight'])/(max_edge + min_edge)
         return g
     
-    df['graph'] = df['graph'].progress_map(lambda x : scale_graph(x))
+    df['graph'] = df['graph'].map(lambda x : scale_graph(x))
