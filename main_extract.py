@@ -6,11 +6,11 @@ import sys
 
 if __name__ == "__main__" :
      config = load_config("config.yaml")
-     file_path = "/home/samuel/Bureau/journal_test.csv" #sys.argv[1]
+     file_path = sys.argv[1]
      logger = logging.getLogger()
 
      try :
-          logger.info(f"extracting graphs from {file_path}")
+          logger.info(f"extracting texts from {file_path}")
           if file_path.endswith(".csv"):
                df_texts = pd.read_csv(file_path)
           elif file_path.endswith(".pkl"):

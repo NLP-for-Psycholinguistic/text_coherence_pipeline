@@ -2,4 +2,9 @@
 scale_graph : True #True or False
 model : "sentence_sim"
 storage : "/home/samuel/Bureau/text_df_graph.pkl"
+storage_exemples : "/home/samuel/Bureau/text_df_graph_exemples.csv"
 sentence_segmentation_method : "punctuation" #spacy, punctuation, punct_commas
+
+paragraph_size : 5
+nb_exemples : 2 #number of exemples per modes to extract, multiply by 3 for the total number/text
+nb_texts : 0 #0 for all texts

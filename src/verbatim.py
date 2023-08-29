@@ -28,7 +28,7 @@ def create_weight_distance_plot(graph:nx.Graph,paragraph_size = 5):
 def mean_weight_distance_plot(weight_distance):
     return np.mean(abs(weight_distance))
 
-def get_exemples(weight_distance,interview,paragraph_size = 5,nb_exemples = 1,mode = 'max'):
+def get_exemples(weight_distance,text,paragraph_size = 5,nb_exemples = 1,mode = 'max'):
     exemples = []
     weight_distance = weight_distance[paragraph_size:len(weight_distance)-paragraph_size]
     if 'normal' in mode:
@@ -44,7 +44,7 @@ def get_exemples(weight_distance,interview,paragraph_size = 5,nb_exemples = 1,mo
         ex['value'] = weight_distance[argsort[0]]
         indexes = [argsort[0]-paragraph_size,argsort[0]+paragraph_size]
         ex['index'] = [i for i in range(indexes[0],indexes[1]+1)]
-        ex['text'] = interview[indexes[0]:indexes[1]]
+        ex['text'] = text[indexes[0]:indexes[1]]
         argsort = [x for x in argsort if x not in ex['index']]
         exemples.append(ex)
         nb_exemples-=1
@@ -55,7 +55,11 @@ def get_exemples_from_subject(subject_line,paragraph_size = 5,nb_exemples = 2):
     weight_distance = subject_line['weight_distance'].values[0]
     mean = subject_line['mean'].values[0]
     std = subject_line['std'].values[0]
-    interview = subject_line['interview'].values[0]
+    text = subject_line['text'].values[0]
+    if 'code' in subject_line.columns:
+        code = subject_line['code'].values[0]
+    else:
+        code = 'EXT_TEXT'
     argsort = np.argsort(weight_distance)
     for mode in ['normal','min','max']:
         if mode == 'min':
@@ -70,10 +74,11 @@ def get_exemples_from_subject(subject_line,paragraph_size = 5,nb_exemples = 2):
             ex['value'] = weight_distance[argsort[0]]
             ex['scaled_value'] = ex['value']/mean
             ex['z_score'] = ex['value']/std
-            ex['code'] = subject_line['code'].values[0]
+            ex['mean'] = mean
+            ex['code'] = code
             indexes = [argsort[0]-paragraph_size,argsort[0]+paragraph_size]
             ex['index'] = [i for i in range(indexes[0],indexes[1]+1)]
-            ex['text'] = format_text_exemple(interview[indexes[0]:indexes[1]])
+            ex['text'] = format_text_exemple(text[indexes[0]:indexes[1]])
             argsort = [x for x in argsort if x not in ex['index']]
             exemples.append(ex)
     return exemples
@@ -102,7 +107,13 @@ def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5
         weight_distance = line[1]['weight_distance']
         mean = line[1]['mean']
         std = line[1]['std']
-        interview = line[1]['interview']
+        text = line[1]['text']
+        mean = line[1]['mean']
+        assert len(text)>paragraph_size*2, "Text is too short for chosen paragraph size"
+        if 'code' in line[1].index:
+            code = line[1]['code']
+        else:
+            code = 'EXT_TEXT'
         argsort = np.argsort(weight_distance)
         for mode in ['min','max','normal']:
             if mode == 'min':
@@ -115,12 +126,13 @@ def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5
                 ex = {}
                 ex['mode'] = mode
                 ex['value'] = weight_distance[argsort[0]]
+                ex['mean'] = mean
                 ex['scaled_value'] = ex['value']/mean
                 ex['z_score'] = ex['value']/std
-                ex['code'] = line[1]['code']
+                ex['code'] = code
                 indexes = [argsort[0]-paragraph_size,argsort[0]+paragraph_size]
                 ex['index'] = [i for i in range(indexes[0],indexes[1]+1)]
-                ex['text'] = format_text_exemple(interview[indexes[0]:indexes[1]])
+                ex['text'] = format_text_exemple(text[indexes[0]:indexes[1]])
                 argsort = [x for x in argsort if x not in ex['index']]
                 exemples.append(ex)
             

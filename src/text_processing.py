@@ -77,7 +77,7 @@ def text_to_sentences_comma(text:str)->list:
     sentences = text_to_sentences(text)
     sentences2 = []
     for s in sentences:
-        if s.count(' ')> 100:
+        if s.count(' ')> 120:
             #sentence is too long
             #split on commas by the middle so that we have two equal sub-sentences 
             sentences2.extend(cut_sentence_by_comma(s))
