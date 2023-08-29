@@ -1,4 +1,5 @@
 ---
-scale : True #True or False
+scale_graph : True #True or False
+model : "sentence_sim"
 storage : "/home/samuel/Bureau/text_df_graph.pkl"
 sentence_segmentation_method : "punctuation" #spacy, punctuation, punct_commas

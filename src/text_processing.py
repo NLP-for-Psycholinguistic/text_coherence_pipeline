@@ -16,25 +16,24 @@ def load_config(config_path:str)->dict:
 
 def texts_to_df_graph(dataset_text:pd.DataFrame,config:str,logger = logging)->pd.DataFrame:
     """Build a dataframe containing the text,and the embeddings of the text"""
-    config_dict = load_config(config)
     assert "text" in dataset_text.columns, "text column not found in dataset"
 
     logger.info("Loading encoder model...")
     encoder = Encoder(config)
 
     logger.info('cleaning text before processing...')
-    dataset_text["text"] = dataset_text["text"].map(lambda x : clean_text(x,config_dict))
+    dataset_text["text"] = dataset_text["text"].map(lambda x : clean_text(x,config))
 
     logger.info("Processing and encoding text...")
     logger.info(f"=>Using method {config['sentence_segmentation_method']}")
-    dataset_text["text"] = dataset_text["text"].map(lambda x : process_for_sentence_trf(x,config_dict))
+    dataset_text["text"] = dataset_text["text"].map(lambda x : process_for_sentence_trf(x,config))
     dataset_text["embeddings"] = dataset_text["text"].map(lambda x : encode_sentence(x,encoder))
 
     logger.info("Building graphs from text...")
     dataset_text["graph"] = dataset_text["text"].map(lambda x : build_graph_nodes(x))
-    dataset_text["graph"] = dataset_text.apply(lambda x : build_coherence_edges(x["graph"],x["embeddings"]))
+    dataset_text["graph"] = dataset_text.apply(lambda x : build_coherence_edges(x.graph,x.embeddings),axis = 1)
 
-    if config_dict['scale_graph']:
+    if config['scale_graph']:
         logger.info("Scaling graphs...")
         scale_df_graph(dataset_text)
     
