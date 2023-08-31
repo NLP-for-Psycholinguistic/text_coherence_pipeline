@@ -13,9 +13,12 @@ Using this similarity graph, we estimate the impact of each sentence on the loca
 With the file containing a dataframe with a text column. Each text in the corpus must be in a separate line:  
 
 `python main_extract('file_path.csv')` or `python main_extract('file_path.pkl')`  
+  
 Resulting dataframe containing texts, all additional columns and graphs is stored according to the storage field of the [config](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/config.yaml)
-Using this pickle file, run : 
+Using this pickle file, run :  
+  
 `python main_verbatim('file_with_graph_path.pkl')`  
+  
 Extracting specific exemples of speech disorder along with a score, the sign of the distance, the z score computed by text, and the scaled score in a dictionnary.  
 This dictionnary is stored in the storage_exemple field of the config
 
