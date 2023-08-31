@@ -27,7 +27,7 @@ The similarity model is the [paraphrase-multilingual-MiniLM-L12-v2](https://hugg
 We compute the impact of sentence i on the local similarity by using a local subgraph containing sentences between i-paragraph_size, i+ paragraph_size. 
 In this subgraph, we compute for each sentence the sum of similarities between the sentence i and all other.  
 Thus we have a time serie of the impact of each sentence on the local similarity.  
-![Summary of the computation pipeline]()
+![Summary of the computation pipeline](readme_files/pipeline1.jpg)
 
 ## Speech disorders
 Our speech disorder definition are taken from [andreasen et al. 1979](https://doi.org/10.1001/archpsyc.1979.01780120045006)
