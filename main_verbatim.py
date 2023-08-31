@@ -4,10 +4,8 @@ import logging
 import sys
 from src.verbatim import get_verbatim
 
-if __name__ == "__main__" :
-    config = load_config("config.yaml")
-    file_path =  sys.argv[1]
-    logger = logging.getLogger()
+def main(file_path,config_path,logger = logging.getLogger()):
+    config = load_config(config_path)
 
     assert file_path.endswith(".pkl"), "file format not supported, use pickle files"
 
@@ -17,7 +15,11 @@ if __name__ == "__main__" :
         logger.info(f"loaded {len(df_corpus)} texts and graphs")
         
         logger.info(f"extracting verbatim...")
-        get_verbatim(df_corpus,paragraph_size = config['paragraph_size'],nb_exemples = config['nb_exemples'],nb_texts = config['nb_texts'],store = config['storage_exemples'])
+        exemples = get_verbatim(df_corpus,paragraph_size = config['paragraph_size'],nb_exemples = config['nb_exemples'],nb_texts = config['nb_texts'],store = config['storage_exemples'])
         logger.info(f"extraction done, stored in {config['storage_exemples']}")
     except Exception as e :
         print(f"failed to store graphs because of {e}")
+    return exemples
+
+if __name__ == "__main__" :
+    main(file_path =  sys.argv[1],config_path = "config.yaml")

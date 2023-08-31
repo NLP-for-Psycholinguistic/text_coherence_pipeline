@@ -109,7 +109,7 @@ def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5
         std = line[1]['std']
         text = line[1]['text']
         mean = line[1]['mean']
-        assert len(text)>paragraph_size*2, "Text is too short for chosen paragraph size"
+        assert len(text)>(paragraph_size*2 + nb_exemples*paragraph_size*3), "Text is too short for chosen paragraph size"
         if 'code' in line[1].index:
             code = line[1]['code']
         else:

@@ -4,10 +4,8 @@ import pandas as pd
 import logging
 import sys
 
-if __name__ == "__main__" :
-     config = load_config("config.yaml")
-     file_path = sys.argv[1]
-     logger = logging.getLogger()
+def main(file_path,config_path,logger = logging.getLogger()):
+     config = load_config(config_path)
 
      try :
           logger.info(f"extracting texts from {file_path}")
@@ -23,3 +21,7 @@ if __name__ == "__main__" :
           logger.info(f"extraction done, stored in {config['storage']}")
      except Exception as e :
           print(f"failed to store graphs because of {e}")
+     return df_texts
+
+if __name__ == "__main__" :
+    main(file_path =  sys.argv[1],config_path = "config.yaml")
