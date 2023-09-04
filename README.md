@@ -3,13 +3,19 @@
 A NLP tool for speech disorder detection, used in the scope of automatic text PTSD classification
 
 ## Introduction
-See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/draft.ipynb) for a hands-on test of the tool.
+See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/example.ipynb) for a hands-on test of the tool on external data.
+See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/demo/demo.ipynb) for a complete test usage on the French 2017 presidential elections discourse corpus, showing the full pipeline from raw text file to extracting speech disorder samples.
 
 Originally written for transcribed speech, the tool computes embeddings of sentences in the text and stores them in a similarity graph.  
 Using this similarity graph, we estimate the impact of each sentence on the local coherence in the chosen paragraph, allowing us to extract examples of speech disorder.  
 
 ## Usage
-
+### Installation
+1) Create a virtual environment `python -m venv /path/to/env`
+2) Activate the environment `source /path/to/env/bin/activate`
+3) Clone the directory `git clone https://github.com/SB-ENSEA/text_coherence_pipeline.git`
+4) Install dependencies `pip install -r requirements.txt`
+### Use
 With the file containing a dataframe with a text column. Each text in the corpus must be in a separate line:  
 
 `python main_extract('file_path.csv')` or `python main_extract('file_path.pkl')`  
@@ -20,11 +26,7 @@ Using this pickle file, run :
 `python main_verbatim('file_with_graph_path.pkl')`  
   
 Extracting specific examples of speech disorder along with a score, the sign of the distance, the z score computed by text, and the scaled score in a dictionnary.  
-<<<<<<< HEAD
 This dictionnary is stored in the storage_example field of the config
-=======
-This dictionnary is stored in the storage_exemple field of the config
->>>>>>> 73d3763477f3936a10bf01f24cea492b5b263fd1
 
 ## Computation 
 This method is based on a previous work, where it was shown that statistics extracted from the sliding paragraph-sized windows of sentences were powerful PTSD classifier. 
@@ -68,12 +70,12 @@ ing relationships, this pattern of speech may also include
 punning associations, so that a word similar in sound
 brings in a new thought.
 
-In our study, we associated Clanging and Perseveration (repetition of words and ideas) to underline repetition at any level, whether narrative, lexical or syntaxic. Clanging can be found in exemples of the "maximum" mode, where sentences are very similar to others, on account of the repetitions they contain. 
+In our study, we associated Clanging and Perseveration (repetition of words and ideas) to underline repetition at any level, whether narrative, lexical or syntaxic. Clanging can be found in examples of the "maximum" mode, where sentences are very similar to others, on account of the repetitions they contain. 
 
 ### Derailment
 >A pattern of spontaneous speech in which the ideas slip off the track onto another one that is clearly but obliquely related, or onto one that is completely unrelated. Things may be said in juxtaposition that lack a meaningful relationship, or the patient may shift idiosyncratically from one frame of reference to another. At times, there may be a vague connection between the ideas; at others, none will be apparent. This pattern of speech is often characterized as sounding "disjointed." Perhaps the commonest manifestation of this disorder is a slow, steady slippage, with no single derailment being particularly severe, so that the speaker gets farther and farther off the track with each derailment without showing any aware¬ ness that his reply no longer has any connection with the question that was asked.
 
-Effects of Derailment are shown with exemples of the 'minimum' mode. These exemples show that removing the sentence from the induced subgraph actually increases the coherence of the paragraph, pointing to the idea that the sentence is a departure from the idea of the paragraph.  
+Effects of Derailment are shown with examples of the 'minimum' mode. These examples show that removing the sentence from the induced subgraph actually increases the coherence of the paragraph, pointing to the idea that the sentence is a departure from the idea of the paragraph.  
 
 ### Incoherence
 >A pattern of speech that is essentially
@@ -100,7 +102,7 @@ patient makes a logical inference between two clauses that
 is unwarranted or illogical. It may take the form of faulty
 inductive inferences.
 
-We mostly include Illogicality as a way to underline non-sequiturs in our texts. Illogicality is shown by exemples of the "minimum" mode.
+We mostly include Illogicality as a way to underline non-sequiturs in our texts. Illogicality is shown by examples of the "minimum" mode.
 
 
 
