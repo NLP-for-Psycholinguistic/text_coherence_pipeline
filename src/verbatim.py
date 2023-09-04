@@ -6,17 +6,17 @@ import csv
 ## Functions to extract verbatim from texts
 #requires a dataframe with graph and associated texts. 
 
-def get_verbatim(df,paragraph_size = 5,nb_exemples = 2,nb_texts = 0,store = False):
+def get_verbatim(df,paragraph_size = 5,nb_examples = 2,nb_texts = 0,store = False):
     df['weight_distance'] = df['graph'].apply(lambda x: create_weight_distance_plot(x,paragraph_size = paragraph_size))
     df['mean'] = df['weight_distance'].apply(lambda x: mean_weight_distance_plot(x))
     df['std'] = df['weight_distance'].apply(lambda x: np.std(x))
-    exemples = sample_exemples_from_df(df,nb_texts=nb_texts,nb_exemples = nb_exemples,paragraph_size = paragraph_size)
+    examples = sample_examples_from_df(df,nb_texts=nb_texts,nb_examples = nb_examples,paragraph_size = paragraph_size)
     if store:
         with open(f"{store}.csv", 'w') as file:
-            wrt = csv.DictWriter(file, fieldnames=exemples[0].keys())
+            wrt = csv.DictWriter(file, fieldnames=examples[0].keys())
             wrt.writeheader()
-            wrt.writerows(exemples)
-    return exemples
+            wrt.writerows(examples)
+    return examples
 
 def create_weight_distance_plot(graph:nx.Graph,paragraph_size = 5):
     weight_distance = [sum([x[2]['weight'] for x in list(graph.subgraph([a for a in range(i-paragraph_size,i+paragraph_size+1)]).edges(data = True))]) for i in graph.nodes()]
@@ -28,8 +28,8 @@ def create_weight_distance_plot(graph:nx.Graph,paragraph_size = 5):
 def mean_weight_distance_plot(weight_distance):
     return np.mean(abs(weight_distance))
 
-def get_exemples(weight_distance,text,paragraph_size = 5,nb_exemples = 1,mode = 'max'):
-    exemples = []
+def get_examples(weight_distance,text,paragraph_size = 5,nb_examples = 1,mode = 'max'):
+    examples = []
     weight_distance = weight_distance[paragraph_size:len(weight_distance)-paragraph_size]
     if 'normal' in mode:
         argsort = np.argsort(abs(weight_distance))
@@ -38,7 +38,7 @@ def get_exemples(weight_distance,text,paragraph_size = 5,nb_exemples = 1,mode = 
         argsort = np.argsort(weight_distance)
     if 'max' in mode:
         argsort = np.flip(argsort)
-    while nb_exemples>0:
+    while nb_examples>0:
         ex = {}
         ex['mode'] = mode
         ex['value'] = weight_distance[argsort[0]]
@@ -46,12 +46,12 @@ def get_exemples(weight_distance,text,paragraph_size = 5,nb_exemples = 1,mode = 
         ex['index'] = [i for i in range(indexes[0],indexes[1]+1)]
         ex['text'] = text[indexes[0]:indexes[1]]
         argsort = [x for x in argsort if x not in ex['index']]
-        exemples.append(ex)
-        nb_exemples-=1
-    return exemples
+        examples.append(ex)
+        nb_examples-=1
+    return examples
 
-def get_exemples_from_subject(subject_line,paragraph_size = 5,nb_exemples = 2):
-    exemples = []
+def get_examples_from_subject(subject_line,paragraph_size = 5,nb_examples = 2):
+    examples = []
     weight_distance = subject_line['weight_distance'].values[0]
     mean = subject_line['mean'].values[0]
     std = subject_line['std'].values[0]
@@ -68,7 +68,7 @@ def get_exemples_from_subject(subject_line,paragraph_size = 5,nb_exemples = 2):
             argsort = np.flip(np.argsort(weight_distance))
         if mode == 'normal':
             argsort = np.argsort(abs(weight_distance))
-        for _ in range(nb_exemples):
+        for _ in range(nb_examples):
             ex = {}
             ex['mode'] = mode
             ex['value'] = weight_distance[argsort[0]]
@@ -78,10 +78,10 @@ def get_exemples_from_subject(subject_line,paragraph_size = 5,nb_exemples = 2):
             ex['code'] = code
             indexes = [argsort[0]-paragraph_size,argsort[0]+paragraph_size]
             ex['index'] = [i for i in range(indexes[0],indexes[1]+1)]
-            ex['text'] = format_text_exemple(text[indexes[0]:indexes[1]])
+            ex['text'] = format_text_example(text[indexes[0]:indexes[1]])
             argsort = [x for x in argsort if x not in ex['index']]
-            exemples.append(ex)
-    return exemples
+            examples.append(ex)
+    return examples
 
 def sort_max_sentences(weight_distance,paragraph_size = 5,mode = 'max'):
     score= len(weight_distance)*[0]
@@ -99,8 +99,8 @@ def sort_max_sentences(weight_distance,paragraph_size = 5,mode = 'max'):
             score[i]+=s
     return score
 
-def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5):
-    exemples = []
+def sample_examples_from_df(df,nb_texts = 0 , nb_examples = 2,paragraph_size = 5):
+    examples = []
     if nb_texts != 0:
         df = df.sample(nb_texts)
     for line in df.iterrows():
@@ -109,7 +109,7 @@ def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5
         std = line[1]['std']
         text = line[1]['text']
         mean = line[1]['mean']
-        assert len(text)>(paragraph_size*2 + nb_exemples*paragraph_size*3), "Text is too short for chosen paragraph size"
+        assert len(text)>(paragraph_size*2 + nb_examples*paragraph_size*3), "Text is too short for chosen paragraph size"
         if 'code' in line[1].index:
             code = line[1]['code']
         else:
@@ -122,7 +122,7 @@ def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5
                 argsort = np.flip(np.argsort(weight_distance))
             if mode == 'normal':
                 argsort = np.argsort(abs(weight_distance))
-            for _ in range(nb_exemples):
+            for _ in range(nb_examples):
                 ex = {}
                 ex['mode'] = mode
                 ex['value'] = weight_distance[argsort[0]]
@@ -132,13 +132,13 @@ def sample_exemples_from_df(df,nb_texts = 0 , nb_exemples = 2,paragraph_size = 5
                 ex['code'] = code
                 indexes = [argsort[0]-paragraph_size,argsort[0]+paragraph_size]
                 ex['index'] = [i for i in range(indexes[0],indexes[1]+1)]
-                ex['text'] = format_text_exemple(text[indexes[0]:indexes[1]])
+                ex['text'] = format_text_example(text[indexes[0]:indexes[1]])
                 argsort = [x for x in argsort if x not in ex['index']]
-                exemples.append(ex)
+                examples.append(ex)
             
-    return exemples
+    return examples
 
-def format_text_exemple(sentences):
+def format_text_example(sentences):
     ret = ''
     for s in sentences:
         ret+=s+'.\n'
