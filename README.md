@@ -3,6 +3,7 @@
 A NLP tool for thought disorder in speech detection, used in the scope of automatic text PTSD classification
 
 This work was carried out as a part of the [13 novembre program](https://www.memoire13novembre.fr/sites/default/files/DPVAlight.pdf),carried by the [HESAM university](https://www.hesam.eu/article-932), with approval from the [CNRS](https://www.cnrs.fr/en) and [Inserm](https://www.inserm.fr/)
+![logo of the participating groups](readme_files/logo_13nov_program.png)
 
 ## Introduction
 See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/example.ipynb) for a hands-on test of the tool on external data.  
