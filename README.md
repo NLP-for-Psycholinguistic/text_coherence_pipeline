@@ -2,6 +2,8 @@
 
 A NLP tool for thought disorder in speech detection, used in the scope of automatic text PTSD classification
 
+This work was carried out as a part of the [13 novembre program](https://www.memoire13novembre.fr/sites/default/files/DPVAlight.pdf),carried by the [HESAM university](https://www.hesam.eu/article-932), with approval from the [CNRS](https://www.cnrs.fr/en) and [Inserm](https://www.inserm.fr/)
+
 ## Introduction
 See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/example.ipynb) for a hands-on test of the tool on external data.  
 See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/demo/demo.ipynb) for a complete test usage on the French 2017 presidential elections discourse corpus, showing the full pipeline from raw text file to extracting thought disorder in speech samples.
@@ -38,7 +40,7 @@ In this subgraph, we compute for each sentence the sum of similarities between t
 Thus we have a sequence of the impact of each sentence on the local similarity.  
 ![Summary of the computation pipeline](readme_files/pipeline1.jpg)
 
-Using $w_{i,j}$ as the weight between sentences i and j,$S$ the sequence of similarities,$N$ the paragraph size, the following computations are made :  
+Using $w_{i,j}$ as the weight between sentences i and j, $S$ the sequence of similarities, $N$ the paragraph size, the following computations are made :  
 
 $$s_i = \sum_{j = i-N, i \neq j}^{i+N} w_{i,j}$$
 Then using $m$ as the mean coherence **on the whole text** :
