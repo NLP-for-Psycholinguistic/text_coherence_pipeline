@@ -3,7 +3,7 @@
 A NLP tool for speech disorder detection, used in the scope of automatic text PTSD classification
 
 ## Introduction
-See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/example.ipynb) for a hands-on test of the tool on external data.
+See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/example.ipynb) for a hands-on test of the tool on external data.  
 See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/demo/demo.ipynb) for a complete test usage on the French 2017 presidential elections discourse corpus, showing the full pipeline from raw text file to extracting speech disorder samples.
 
 Originally written for transcribed speech, the tool computes embeddings of sentences in the text and stores them in a similarity graph.  
