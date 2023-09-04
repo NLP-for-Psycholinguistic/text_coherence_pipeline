@@ -1,13 +1,13 @@
 # Text Coherence Pipeline tool
 
-A NLP tool for speech disorder detection, used in the scope of automatic text PTSD classification
+A NLP tool for thought disorder in speech detection, used in the scope of automatic text PTSD classification
 
 ## Introduction
 See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/example.ipynb) for a hands-on test of the tool on external data.  
-See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/demo/demo.ipynb) for a complete test usage on the French 2017 presidential elections discourse corpus, showing the full pipeline from raw text file to extracting speech disorder samples.
+See [this jupyter notebook](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/demo/demo.ipynb) for a complete test usage on the French 2017 presidential elections discourse corpus, showing the full pipeline from raw text file to extracting thought disorder in speech samples.
 
 Originally written for transcribed speech, the tool computes embeddings of sentences in the text and stores them in a similarity graph.  
-Using this similarity graph, we estimate the impact of each sentence on the local coherence in the chosen paragraph, allowing us to extract examples of speech disorder.  
+Using this similarity graph, we estimate the impact of each sentence on the local coherence in the chosen paragraph, allowing us to extract examples of thought disorder in speech.  
 
 ## Usage
 ### Installation
@@ -25,12 +25,12 @@ Using this pickle file, run :
   
 `python main_verbatim('file_with_graph_path.pkl')`  
   
-Extracting specific examples of speech disorder along with a score, the sign of the distance, the z score computed by text, and the scaled score in a dictionnary.  
+Extracting specific examples of thought disorder in speech along with a score, the sign of the distance, the z score computed by text, and the scaled score in a dictionnary.  
 This dictionnary is stored in the storage_example field of the config
 
 ## Computation 
 This method is based on a previous work, where it was shown that statistics extracted from the sliding paragraph-sized windows of sentences were powerful PTSD classifier. 
-We have adapted these general, text-level statistics to extract specific examples of speech disorder on the paragraph level.  
+We have adapted these general, text-level statistics to extract specific examples of thought disorder in speech on the paragraph level.  
 
 The similarity model is the [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2) used in the [sentence_transformer](https://www.sbert.net/) python archive.  
 We compute the impact of sentence i on the local similarity by using a local subgraph containing sentences between i-paragraph_size, i+ paragraph_size. 
@@ -50,16 +50,16 @@ We are able to extract data from this sequence, which will be the examples and t
 - **Z-score**, the score of the example expressed as a product of the standard deviation of local coherence
 - **Scaled score**, the score of the example divided by $m$
 
-**Important Disclaimer** : This method was made to get precise verbatim from transcribed speech, with the scope of speech disorders and PTSD. Thus there is no guarantee that this method works on written text, on non-PTSD issued speech, etc... 
-However, here are some effects to look out for if you use this tool as a text-level speech disorder indicator:
+**Important Disclaimer** : This method was made to get precise verbatim from transcribed speech, with the scope of thought disorder in speechs and PTSD. Thus there is no guarantee that this method works on written text, on non-PTSD issued speech, etc... 
+However, here are some effects to look out for if you use this tool as a text-level thought disorder in speech indicator:
 - **The value of $\lvert S \rvert$**, shows how much the narrative flow is impacted by each sentence, revealing effects of [clanging](#clanging) and [derailment](#derailment)
 - **The scores of examples**, maximum and minimum values are often at a relative score between 4 and 10, normal examples are often between 0 and 2. An overlap between the scores of these modes in indicative of speech disorganisation
 - **The Value of m**, the mean coherence is especially good at separating between written text and transcribed speech, according to our testing
 
-## Speech disorders
-Our speech disorder definition are taken from [andreasen et al. 1979](https://doi.org/10.1001/archpsyc.1979.01780120045006)
-Considering our model is based on sentence similarity, we consider only the speech disorders that can be analysed from the paragraph level; without entering lexical data. 
-This leaves us with the four following effects : **Clanging** , **Derailment**, **Incoherence**, **Illogicality**. Another speech disorder that we could consider is tangeantiality, however it supposes that there is questions and answers in the text
+## thought disorders in speech
+Our thought disorder definitions are taken from [andreasen et al. 1979](https://doi.org/10.1001/archpsyc.1979.01780120045006)
+Considering our model is based on sentence similarity, we consider only the thought disorders that can be analysed from the paragraph level; without entering lexical data. 
+This leaves us with the four following effects : **Clanging** , **Derailment**, **Incoherence**, **Illogicality**. Another thought disorder that we could consider is tangeantiality, however it supposes that there are questions and answers in the text
 
 ### Clanging
 > A pattern of speech in which sounds rather
