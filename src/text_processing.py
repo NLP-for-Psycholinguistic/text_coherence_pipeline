@@ -36,8 +36,11 @@ def texts_to_df_graph(dataset_text:pd.DataFrame,config:str,logger = logging)->pd
     if config['scale_graph']:
         logger.info("Scaling graphs...")
         scale_df_graph(dataset_text)
+    try : 
+        dataset_text.drop(columns=['Unnamed: 0'],inplace=True)
+    except :
+        pass
     
-    dataset_text.drop(columns=['Unnamed: 0'],inplace=True)
     return dataset_text
 
 

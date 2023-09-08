@@ -1,0 +1,5 @@
+src/__pycache__/*
+src/__pycache__/sim.cpython-39.pyc
+*.pyc
+src/*.pyc
+13_nov/*

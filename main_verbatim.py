@@ -18,8 +18,11 @@ def main(file_path,config_path,logger = logging.getLogger()):
         examples = get_verbatim(df_corpus,paragraph_size = config['paragraph_size'],nb_examples = config['nb_examples'],nb_texts = config['nb_texts'],store = config['storage_examples'])
         logger.info(f"extraction done, stored in {config['storage_examples']}")
     except Exception as e :
+        examples = " "
         print(f"failed to store graphs because of {e}")
     return examples
 
 if __name__ == "__main__" :
-    main(file_path =  sys.argv[1],config_path = "config.yaml")
+    #define logger
+    logger = logging.getLogger()
+    main(file_path =  sys.argv[1],config_path = "config.yaml", logger=logger)

@@ -12,7 +12,7 @@ def get_verbatim(df,paragraph_size = 5,nb_examples = 2,nb_texts = 0,store = Fals
     df['std'] = df['weight_distance'].apply(lambda x: np.std(x))
     examples = sample_examples_from_df(df,nb_texts=nb_texts,nb_examples = nb_examples,paragraph_size = paragraph_size)
     if store:
-        with open(f"{store}.csv", 'w') as file:
+        with open(f"{store}", 'w') as file:
             wrt = csv.DictWriter(file, fieldnames=examples[0].keys())
             wrt.writeheader()
             wrt.writerows(examples)
@@ -109,7 +109,9 @@ def sample_examples_from_df(df,nb_texts = 0 , nb_examples = 2,paragraph_size = 5
         std = line[1]['std']
         text = line[1]['text']
         mean = line[1]['mean']
-        assert len(text)>(paragraph_size*2 + nb_examples*paragraph_size*3), "Text is too short for chosen paragraph size"
+        if not  len(text)>(paragraph_size*2 + nb_examples*paragraph_size*3) :
+            print("Text is too short for chosen paragraph size")
+            continue
         if 'code' in line[1].index:
             code = line[1]['code']
         else:
