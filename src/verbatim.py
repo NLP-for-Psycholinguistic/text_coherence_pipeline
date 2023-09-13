@@ -18,6 +18,26 @@ def get_verbatim(df,paragraph_size = 5,nb_examples = 2,nb_texts = 0,store = Fals
             wrt.writerows(examples)
     return examples
 
+def get_verbatim_score_by_treshold(df,threshold,paragraph_size = 5):
+    if 'weight_distance' not in df.columns:
+        df['weight_distance'] = df['graph'].apply(lambda x: create_weight_distance_plot(x,paragraph_size = paragraph_size))
+
+    score_dict = {}
+    for line in df.iterrows():
+        score = 0
+        weight_distance_abs = np.abs(line[1]['weight_distance'])
+        l = len(weight_distance_abs)
+        argsort = np.flip(np.argsort(weight_distance_abs[paragraph_size:-paragraph_size]))
+        while weight_distance_abs[argsort[0]+paragraph_size]>threshold:
+            indexes = list(range(argsort[0]-paragraph_size,argsort[0]+paragraph_size+1))
+            score+=np.mean([weight_distance_abs[i+paragraph_size] for i in indexes])
+            argsort = [x for x in argsort if x not in indexes]
+        score_dict[line[1].name] = score
+    df['score'] = pd.Series(score_dict)
+    return df
+
+
+
 def create_weight_distance_plot(graph:nx.Graph,paragraph_size = 5):
     weight_distance = [sum([x[2]['weight'] for x in list(graph.subgraph([a for a in range(i-paragraph_size,i+paragraph_size+1)]).edges(data = True))]) for i in graph.nodes()]
     mean = np.mean(weight_distance[paragraph_size:len(weight_distance)-paragraph_size])
@@ -59,7 +79,7 @@ def get_examples_from_subject(subject_line,paragraph_size = 5,nb_examples = 2):
     if 'code' in subject_line.columns:
         code = subject_line['code'].values[0]
     else:
-        code = 'EXT_TEXT'
+        code = f"{subject_line[0]}" #use index as code
     argsort = np.argsort(weight_distance)
     for mode in ['normal','min','max']:
         if mode == 'min':

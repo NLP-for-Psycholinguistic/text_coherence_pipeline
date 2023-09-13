@@ -17,5 +17,3 @@ def sentences_statistics(corpus_text_df:pd.DataFrame)-> dict:
         'outliers sentence size' : len([length for length in sentences_lengths if length > np.mean(sentences_lengths) + 3*np.std(sentences_lengths)])/len(sentences_lengths)
     }
     return statistics
-
-

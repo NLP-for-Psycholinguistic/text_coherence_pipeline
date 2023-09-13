@@ -24,4 +24,5 @@ def main(file_path,config_path,logger = logging.getLogger()):
      return df_texts
 
 if __name__ == "__main__" :
+    logging.basicConfig(filename='extract_logs.log', level=logging.INFO)
     main(file_path =  sys.argv[1],config_path = "config.yaml")

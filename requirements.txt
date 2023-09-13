@@ -6,3 +6,4 @@ networkx
 spacy
 matplotlib
 sentence_transformers
+mdutils

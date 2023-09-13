@@ -22,4 +22,5 @@ def main(file_path,config_path,logger = logging.getLogger()):
     return examples
 
 if __name__ == "__main__" :
+    logging.basicConfig(filename='verbatim_logs.log', level=logging.INFO)
     main(file_path =  sys.argv[1],config_path = "config.yaml")
