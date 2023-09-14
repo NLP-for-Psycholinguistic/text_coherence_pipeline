@@ -11,8 +11,8 @@ nb_texts : 0 #0 for all texts
 
 report_config : 
   use_config : True
-  sample : 0.5 # ratio of data shown in report
+  sample : 1 # ratio of data shown in report
   sort_by_score : False #True or False
-  sort_by_external_column : False #column name or False
-  mode_selection : ['normal'] #'all' or list of mode(s)
-  hidden_score : True #True or False
+  sort_by_external_column : 'PTSD_probable' #column name or False
+  mode_selection : ['min','max'] #'all' or list of mode(s)
+  hidden_score : False #True or False

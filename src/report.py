@@ -71,7 +71,7 @@ def write_report_wconfig(df_example,config):
 
         return write_report_hidden(df_example)
     elif config['sort_by_score'] or config['sort_by_external_column']:
-        sort_column = ('scaled_value' if config['sort_by_score'] == False else config['sort_by_external_column'])
+        sort_column = ('scaled_value' if config['sort_by_score'] == True else config['sort_by_external_column'])
         assert sort_column in df_example.columns
 
         if config['mode_selection'] != 'all':
@@ -83,7 +83,13 @@ def write_report_wconfig(df_example,config):
         df_example[sort_column + 'abs'] = df_example[sort_column].abs()
 
         df_example = df_example.sort_values(by=sort_column + 'abs',ascending=False)
-        return write_report_by_order(df_example)
+        df_example = df_example.drop(columns=[sort_column + 'abs'])
+        print(df_example)
+        if sort_column=='scaled_value':
+            optional_column = None
+        else:
+            optional_column = sort_column
+        return write_report_by_order(df_example,optional_column=optional_column)
     elif config['mode_selection'] != 'all':
         df_example = df_example[df_example['mode'].isin(config['mode_selection'])]
         if config['sample']!=1:
@@ -128,7 +134,7 @@ def write_report_hidden(df_example):
     mdFile.new_table_of_contents(table_title='Table of content', depth=3)
     return mdFile
 
-def write_report_by_order(df_example):
+def write_report_by_order(df_example,optional_column=None):
     """Writes a markdown report with the verbatim in the order of the dataframe"""
 
     mdFile = mdutils.MdUtils(file_name='report',title='Verbatim Results Report')
@@ -148,11 +154,16 @@ def write_report_by_order(df_example):
     mdFile.new_line()
     for index, row in df_example.iterrows():
                 mode = row['mode']
-                mdFile.new_paragraph(f"Possible speech disorders for these verbatim are : {speech_disorders_dict[mode]}",bold_italics_code='b')
+                mdFile.new_line()
                 mdFile.new_header(level=2, title=f"Verbatim {index} of mode {mode}")
+                mdFile.new_line()
+                mdFile.new_paragraph(f"Possible speech disorders for these verbatim are : {speech_disorders_dict[mode]}",bold_italics_code='b')
 
                 mdFile.new_line()
-
+                if optional_column!=None:
+                    mdFile.write(f"{optional_column} : ")
+                    mdFile.write(f"{row[optional_column]}",bold_italics_code='b',color='red')
+                    mdFile.new_line()
                 mdFile.write("Verbatim score : ")
                 mdFile.write(f"{round(row['value'],3)}",bold_italics_code="b",color='red')
 
