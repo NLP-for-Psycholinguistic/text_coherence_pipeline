@@ -21,7 +21,7 @@ Using this similarity graph, we estimate the impact of each sentence on the loca
 ### Use
 With the file containing a dataframe with a text column. Each text in the corpus must be in a separate line:  
 
-`python main_extract('file_path.csv')` or `python main_extract('file_path.pkl')`  
+`python main_extract.py  ./demo/campagne_2017_cleaned.csv` or `python main_extract.py  ./demo/campagne_2017_cleaned.csv`  
   
 Resulting dataframe containing texts, all additional columns and graphs is stored according to the storage field of the [config](https://github.com/SB-ENSEA/text_coherence_pipeline/blob/main/config.yaml)
 Using this pickle file, run :  
