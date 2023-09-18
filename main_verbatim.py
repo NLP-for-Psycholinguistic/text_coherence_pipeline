@@ -23,6 +23,6 @@ def main(file_path,config_path,logger = logging.getLogger()):
     return examples
 
 if __name__ == "__main__" :
-    #define logger
+    logging.basicConfig(filename='verbatim_logs.log', level=logging.INFO)
     logger = logging.getLogger()
-    main(file_path =  sys.argv[1],config_path = "config.yaml", logger=logger)
+    main(file_path =  sys.argv[1],config_path = "config.yaml")
